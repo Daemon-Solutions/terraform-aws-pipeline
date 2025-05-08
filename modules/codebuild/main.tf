@@ -1,6 +1,10 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.main
 // SPDX-License-Identifier: MIT-0
 
+locals {
+  build_spec_path = var.build_spec_override != "" ? var.build_spec_override : "${path.module}/buildspecs/${var.build_spec}"
+}
+
 resource "aws_codebuild_project" "this" {
   name          = var.codebuild_name
   build_timeout = var.build_timeout
@@ -34,10 +38,9 @@ resource "aws_codebuild_project" "this" {
 
   source {
     type                = "CODEPIPELINE"
-    buildspec           = file("${path.module}/buildspecs/${var.build_spec}")
+    buildspec           = file("${local.build_spec_path}")
     git_clone_depth     = 0
     insecure_ssl        = false
     report_build_status = false
   }
 }
-

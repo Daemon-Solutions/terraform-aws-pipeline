@@ -29,3 +29,9 @@ variable "log_group" {
 variable "image" {
   type = string
 }
+
+variable "build_spec_override" {
+  type        = string
+  default     = ""
+  description = "path to the buildspec override file"
+}

@@ -111,3 +111,14 @@ variable "tflint_version" {
   type    = string
   default = "0.48.0"
 }
+
+
+variable "plan_spec" {
+  description = "plan spec file"
+  type        = string
+}
+
+variable "apply_spec" {
+  description = "apply spec file"
+  type        = string
+}

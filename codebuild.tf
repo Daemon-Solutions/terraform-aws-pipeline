@@ -20,6 +20,7 @@ module "plan" {
   environment_variables = local.env_var
   build_timeout         = var.build_timeout
   build_spec            = "plan.yml"
+  build_spec_override   = var.plan_spec
   log_group             = aws_cloudwatch_log_group.this.name
   image                 = "hashicorp/terraform:${var.terraform_version}"
 }
@@ -31,6 +32,7 @@ module "apply" {
   environment_variables = local.env_var
   build_timeout         = var.build_timeout
   build_spec            = "apply.yml"
+  build_spec_override   = var.apply_spec
   log_group             = aws_cloudwatch_log_group.this.name
   image                 = "hashicorp/terraform:${var.terraform_version}"
 }
