@@ -12,6 +12,14 @@ phases:
       - file=$(sha256sum tflint_linux_amd64.zip | cut -d" " -f1)
       - sha=$(grep $file checksums.txt | cut -d" " -f1)
       - if [ "${file}" = "${sha}" ]; then unzip -o tflint_linux_amd64.zip ; else exit 1 ; fi
+  pre_build:
+    commands:
+      - mkdir -p ~/.ssh
+      - echo "$GITHUB_KEY" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - eval $(ssh-agent -s)
+      - ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+      - ssh-add ~/.ssh/id_rsa
 
   build:
     commands:   
