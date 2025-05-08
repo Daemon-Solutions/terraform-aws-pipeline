@@ -19,6 +19,7 @@ locals {
     TF_VERSION      = var.terraform_version
     TFLINT_VERSION  = var.tflint_version
     SOURCE_DIR      = var.source_dir
+    GITHUB_KEY      = var.github_key
   })
 
   conditional_env_var = merge(local.env_var, {
