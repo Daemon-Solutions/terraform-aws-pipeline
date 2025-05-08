@@ -1,7 +1,7 @@
 version: 0.2
 
 phases:
- pre_build:
+  pre_build:
     commands:
       - mkdir -p ~/.ssh
       - echo "$GITHUB_KEY" > ~/.ssh/id_rsa

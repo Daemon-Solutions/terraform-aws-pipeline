@@ -141,3 +141,14 @@ variable "github_key" {
   type        = string
   default     = ""
 }
+
+variable "validation_stage_flags" {
+  description = "Dictates which validation stages to run. Supported values are validate, fmt, lint, and sast. Each stage can be set to true or false."
+  type        = map(string)
+  default = {
+    validate = true
+    fmt      = true
+    lint     = false
+    sast     = false
+  }
+}
