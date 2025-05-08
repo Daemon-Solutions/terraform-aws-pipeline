@@ -15,7 +15,6 @@ phases:
   build:
     commands:   
       - ls
-      - env
       - cd "$SOURCE_DIR"
       - |
         if [ -z "${CHECKOV_SKIPS}" ]; then 
