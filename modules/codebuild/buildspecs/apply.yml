@@ -11,6 +11,6 @@ phases:
       - ssh-add ~/.ssh/id_rsa
   build:
     commands:
-      - cd "$SOURCE_DIR"
+      - cd "$CODEBUILD_SRC_DIR/$SOURCE_DIR"
       - terraform init
       - terraform apply -auto-approve
