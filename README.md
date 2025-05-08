@@ -257,12 +257,14 @@ No requirements.
 | <a name="input_codebuild_policy"></a> [codebuild\_policy](#input\_codebuild\_policy) | replaces CodeBuild's AWSAdministratorAccess IAM policy | `string` | `null` | no |
 | <a name="input_connection"></a> [connection](#input\_connection) | arn of the CodeConnection | `string` | `null` | no |
 | <a name="input_detect_changes"></a> [detect\_changes](#input\_detect\_changes) | allows third-party servicesm like GitHub to invoke the pipeline | `bool` | `false` | no |
+| <a name="input_env_vars"></a> [env\_vars](#input\_env\_vars) | Extra environment variables to be passed to CodeBuild | `map(string)` | `{}` | no |
 | <a name="input_kms_key"></a> [kms\_key](#input\_kms\_key) | AWS KMS key ARN | `string` | `null` | no |
 | <a name="input_log_retention"></a> [log\_retention](#input\_log\_retention) | CloudWatch log group retention, in days | `number` | `90` | no |
 | <a name="input_mode"></a> [mode](#input\_mode) | pipeline execution mode | `string` | `"SUPERSEDED"` | no |
 | <a name="input_pipeline_name"></a> [pipeline\_name](#input\_pipeline\_name) | n/a | `string` | n/a | yes |
 | <a name="input_plan_spec"></a> [plan\_spec](#input\_plan\_spec) | plan spec file | `string` | n/a | yes |
 | <a name="input_repo"></a> [repo](#input\_repo) | source repo name | `string` | n/a | yes |
+| <a name="input_source_dir"></a> [source\_dir](#input\_source\_dir) | CodeBuild source directory | `string` | `"."` | no |
 | <a name="input_tagnag_version"></a> [tagnag\_version](#input\_tagnag\_version) | n/a | `string` | `"0.5.8"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | tags to check for | `string` | `""` | no |
 | <a name="input_terraform_version"></a> [terraform\_version](#input\_terraform\_version) | n/a | `string` | `"1.5.7"` | no |

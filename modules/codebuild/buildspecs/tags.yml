@@ -10,5 +10,5 @@ phases:
 
   build:
     commands:
-      - cd "$CODEBUILD_SRC_DIR"
+      - cd "$SOURCE_DIR"
       - tag-nag . --tags $TAGS

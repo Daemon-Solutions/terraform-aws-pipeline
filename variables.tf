@@ -122,3 +122,15 @@ variable "apply_spec" {
   description = "apply spec file"
   type        = string
 }
+
+variable "env_vars" {
+  description = "Extra environment variables to be passed to CodeBuild"
+  type        = map(string)
+  default     = {}
+}
+
+variable "source_dir" {
+  description = "CodeBuild source directory"
+  type        = string
+  default     = "."
+}
