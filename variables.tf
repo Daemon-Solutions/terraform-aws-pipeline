@@ -134,3 +134,10 @@ variable "source_dir" {
   type        = string
   default     = "."
 }
+
+
+variable "github_key" {
+  description = "GitHub private key to access interal repositories"
+  type        = string
+  default     = ""
+}

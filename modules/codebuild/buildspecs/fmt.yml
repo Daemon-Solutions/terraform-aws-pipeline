@@ -9,7 +9,6 @@ phases:
       - eval $(ssh-agent -s)
       - ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
       - ssh-add ~/.ssh/id_rsa
-
   build:
     commands:   
       - cd "$SOURCE_DIR"
