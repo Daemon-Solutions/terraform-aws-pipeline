@@ -23,6 +23,8 @@ locals {
     if enabled && contains(keys(local.all_validation_stages), stage)
   }
 
+
+
   conditional_validation_stages = merge(local.validation_stages, {
     tags = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
   })
@@ -35,6 +37,7 @@ locals {
     TFLINT_VERSION  = var.tflint_version
     SOURCE_DIR      = var.source_dir
     GITHUB_KEY      = var.github_key
+    ASSUME_ROLE_ARN = var.assume_role_arn
   })
 
   conditional_env_var = merge(local.env_var, {

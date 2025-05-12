@@ -152,3 +152,15 @@ variable "validation_stage_flags" {
     sast     = false
   }
 }
+
+variable "assume_role_arn" {
+  description = "IAM role ARN to assume for CodeBuild"
+  type        = string
+}
+
+
+variable "manual_approve" {
+  description = "Determines whether to add a manual approval step before the apply stage."
+  type        = bool
+  default     = true
+}

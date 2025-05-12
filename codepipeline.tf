@@ -70,7 +70,7 @@ resource "aws_codepipeline" "this" {
       name      = "Approval"
       category  = "Approval"
       owner     = "AWS"
-      provider  = "Manual"
+      provider  = var.manual_approve ? "Manual" : "CodeBuild"
       version   = "1"
       run_order = 2
 

@@ -250,6 +250,7 @@ No requirements.
 | <a name="input_access_logging_bucket"></a> [access\_logging\_bucket](#input\_access\_logging\_bucket) | s3 server access logging bucket arn | `string` | `null` | no |
 | <a name="input_apply_spec"></a> [apply\_spec](#input\_apply\_spec) | apply spec file | `string` | n/a | yes |
 | <a name="input_artifact_retention"></a> [artifact\_retention](#input\_artifact\_retention) | s3 artifact bucket retention, in days | `number` | `90` | no |
+| <a name="input_assume_role_arn"></a> [assume\_role\_arn](#input\_assume\_role\_arn) | IAM role ARN to assume for CodeBuild | `string` | n/a | yes |
 | <a name="input_branch"></a> [branch](#input\_branch) | branch to source | `string` | `"main"` | no |
 | <a name="input_build_timeout"></a> [build\_timeout](#input\_build\_timeout) | CodeBuild project build timeout | `number` | `10` | no |
 | <a name="input_checkov_skip"></a> [checkov\_skip](#input\_checkov\_skip) | list of checkov checks to skip | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
@@ -261,6 +262,7 @@ No requirements.
 | <a name="input_github_key"></a> [github\_key](#input\_github\_key) | GitHub private key to access interal repositories | `string` | `""` | no |
 | <a name="input_kms_key"></a> [kms\_key](#input\_kms\_key) | AWS KMS key ARN | `string` | `null` | no |
 | <a name="input_log_retention"></a> [log\_retention](#input\_log\_retention) | CloudWatch log group retention, in days | `number` | `90` | no |
+| <a name="input_manual_approve"></a> [manual\_approve](#input\_manual\_approve) | Determines whether to add a manual approval step before the apply stage. | `bool` | `true` | no |
 | <a name="input_mode"></a> [mode](#input\_mode) | pipeline execution mode | `string` | `"SUPERSEDED"` | no |
 | <a name="input_pipeline_name"></a> [pipeline\_name](#input\_pipeline\_name) | n/a | `string` | n/a | yes |
 | <a name="input_plan_spec"></a> [plan\_spec](#input\_plan\_spec) | plan spec file | `string` | n/a | yes |
@@ -270,6 +272,7 @@ No requirements.
 | <a name="input_tags"></a> [tags](#input\_tags) | tags to check for | `string` | `""` | no |
 | <a name="input_terraform_version"></a> [terraform\_version](#input\_terraform\_version) | n/a | `string` | `"1.5.7"` | no |
 | <a name="input_tflint_version"></a> [tflint\_version](#input\_tflint\_version) | n/a | `string` | `"0.48.0"` | no |
+| <a name="input_validation_stage_flags"></a> [validation\_stage\_flags](#input\_validation\_stage\_flags) | Dictates which validation stages to run. Supported values are validate, fmt, lint, and sast. Each stage can be set to true or false. | `map(string)` | <pre>{<br>  "fmt": true,<br>  "lint": false,<br>  "sast": false,<br>  "validate": {<br>    "enabled": true,<br>    "on_failure": "CONTINUE"<br>  }<br>}</pre> | no |
 
 ## Outputs
 
