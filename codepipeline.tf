@@ -54,13 +54,14 @@ resource "aws_codepipeline" "this" {
   stage {
     name = "Plan"
     action {
-      name            = "Plan"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
-      input_artifacts = ["source_output"]
-      version         = "1"
-      run_order       = 1
+      name             = "Plan"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source_output"]
+      output_artifacts = ["plan_output"]
+      version          = "1"
+      run_order        = 1
 
       configuration = {
         ProjectName = module.plan.codebuild_project.name
@@ -87,7 +88,7 @@ resource "aws_codepipeline" "this" {
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
-      input_artifacts = ["source_output"]
+      input_artifacts = ["plan_output"]
       version         = "1"
 
       configuration = {
