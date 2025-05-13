@@ -67,16 +67,19 @@ resource "aws_codepipeline" "this" {
         ProjectName = module.plan.codebuild_project.name
       }
     }
-    action {
-      name      = "Approval"
-      category  = "Approval"
-      owner     = "AWS"
-      provider  = var.manual_approve ? "Manual" : "CodeBuild"
-      version   = "1"
-      run_order = 2
+    dynamic "action" {
+      for_each = var.manual_approve ? [1] : []
+      content {
+        name      = "Approval"
+        category  = "Approval"
+        owner     = "AWS"
+        provider  = "Manual"
+        version   = "1"
+        run_order = 2
 
-      configuration = {
-        CustomData = "This action will approve the deployment of resources in ${var.pipeline_name}. Please review the plan action before approving."
+        configuration = {
+          CustomData = "This action will approve the deployment of resources in ${var.pipeline_name}. Please review the plan action before approving."
+        }
       }
     }
   }
