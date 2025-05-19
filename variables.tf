@@ -204,8 +204,8 @@ variable "validation_lint_settings" {
   description = "Settings for the lint validation stage. Valid values for on_failure are the same as the codebuild on-failure settings."
 
   type = object({
-    enabled            = optional(bool, true)
-    contine_on_failure = optional(bool, true)
+    enabled             = optional(bool, true)
+    continue_on_failure = optional(bool, true)
   })
 
   default = {
