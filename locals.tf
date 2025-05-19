@@ -2,27 +2,17 @@
 // SPDX-License-Identifier: MIT-0
 
 locals {
-  all_validation_stages = {
+  validation_stages = merge({
     validate = "hashicorp/terraform:${var.terraform_version}"
     fmt      = "hashicorp/terraform:${var.terraform_version}"
-    lint     = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
-    sast     = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
-  }
-
-
-  validation_stage_flags = merge({
-    validate = true
-    fmt      = true
-    lint     = false
-    sast     = false
-  }, var.validation_stage_flags)
-
-  validation_stages = {
-    for stage, enabled in local.validation_stage_flags :
-    stage => local.all_validation_stages[stage]
-    if enabled && contains(keys(local.all_validation_stages), stage)
-  }
-
+    },
+    var.validation_sast_settings.enabled ? {
+      sast = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
+    } : {},
+    var.validation_lint_settings.enabled ? {
+      lint = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
+    } : {}
+  )
 
 
   conditional_validation_stages = merge(local.validation_stages, {
@@ -30,14 +20,17 @@ locals {
   })
 
   env_var = merge(var.env_vars, {
-    CHECKOV_SKIPS   = join(",", "${var.checkov_skip}")
-    CHECKOV_VERSION = var.checkov_version
-    SAST_REPORT_ARN = aws_codebuild_report_group.sast.arn
-    TF_VERSION      = var.terraform_version
-    TFLINT_VERSION  = var.tflint_version
-    SOURCE_DIR      = var.source_dir
-    GITHUB_KEY      = var.github_key
-    ASSUME_ROLE_ARN = var.assume_role_arn
+    CHECKOV_SKIPS         = join(",", "${var.checkov_skip}")
+    CHECKOV_VERSION       = var.checkov_version
+    SAST_REPORT_ARN       = aws_codebuild_report_group.sast.arn
+    LINT_REPORT_ARN       = aws_codebuild_report_group.lint.arn
+    TF_VERSION            = var.terraform_version
+    TFLINT_VERSION        = var.tflint_version
+    SOURCE_DIR            = var.source_dir
+    GITHUB_KEY            = var.github_key
+    ASSUME_ROLE_ARN       = var.assume_role_arn
+    CONTINUE_ON_LINT_FAIL = var.validation_lint_settings.continue_on_failure
+    CONTINUE_ON_SAST_FAIL = var.validation_sast_settings.continue_on_failure
   })
 
   conditional_env_var = merge(local.env_var, {

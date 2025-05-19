@@ -2,6 +2,8 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 24
     commands:
       - cd /usr/bin
       - yum install -y yum-utils
@@ -12,6 +14,7 @@ phases:
       - file=$(sha256sum tflint_linux_amd64.zip | cut -d" " -f1)
       - sha=$(grep $file checksums.txt | cut -d" " -f1)
       - if [ "${file}" = "${sha}" ]; then unzip -o tflint_linux_amd64.zip ; else exit 1 ; fi
+      - npm install -g xunit-viewer
   pre_build:
     commands:
       - mkdir -p ~/.ssh
@@ -20,10 +23,23 @@ phases:
       - eval $(ssh-agent -s)
       - ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
       - ssh-add ~/.ssh/id_rsa
-
   build:
     commands:   
       - cd "$CODEBUILD_SRC_DIR/$SOURCE_DIR"
       - terraform init -backend=false
       - tflint --init
-      - tflint
+      - tflint --format junit > tflint.xml || $CONTINUE_ON_LINT_FAIL
+      - xunit-viewer -r tflint.xml -o tflint-$CODEBUILD_RESOLVED_SOURCE_VERSION.html -t "TFLint Report" 
+      - echo "TFLint complete. Report available in CodeBuild project > Reports"
+
+reports:
+  ${LINT_REPORT_ARN}:
+    files:
+      - tflint.xml
+    base-directory: $CODEBUILD_SRC_DIR/$SOURCE_DIR
+    file-format: JUNITXML
+
+artifacts:
+  files:
+    - tflint-$CODEBUILD_RESOLVED_SOURCE_VERSION.html
+  base-directory: $CODEBUILD_SRC_DIR/$SOURCE_DIR
