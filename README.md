@@ -277,7 +277,7 @@ No requirements.
 | <a name="input_tags"></a> [tags](#input\_tags) | tags to check for | `string` | `""` | no |
 | <a name="input_terraform_version"></a> [terraform\_version](#input\_terraform\_version) | n/a | `string` | `"1.5.7"` | no |
 | <a name="input_tflint_version"></a> [tflint\_version](#input\_tflint\_version) | n/a | `string` | `"0.48.0"` | no |
-| <a name="input_validation_lint_settings"></a> [validation\_lint\_settings](#input\_validation\_lint\_settings) | Settings for the lint validation stage. Valid values for on\_failure are the same as the codebuild on-failure settings. | <pre>object({<br>    enabled            = optional(bool, true)<br>    contine_on_failure = optional(bool, true)<br>  })</pre> | <pre>{<br>  "continue_on_failure": true,<br>  "enabled": true<br>}</pre> | no |
+| <a name="input_validation_lint_settings"></a> [validation\_lint\_settings](#input\_validation\_lint\_settings) | Settings for the lint validation stage. Valid values for on\_failure are the same as the codebuild on-failure settings. | <pre>object({<br>    enabled             = optional(bool, true)<br>    continue_on_failure = optional(bool, true)<br>  })</pre> | <pre>{<br>  "continue_on_failure": true,<br>  "enabled": true<br>}</pre> | no |
 | <a name="input_validation_sast_settings"></a> [validation\_sast\_settings](#input\_validation\_sast\_settings) | Settings for sast validation stage. Valid values for on\_failure are the same as the codebuild on-failure settings. | <pre>object({<br>    enabled             = optional(bool, true)<br>    continue_on_failure = optional(bool, true)<br>  })</pre> | <pre>{<br>  "enabled": true,<br>  "on_failure": true<br>}</pre> | no |
 
 ## Outputs
