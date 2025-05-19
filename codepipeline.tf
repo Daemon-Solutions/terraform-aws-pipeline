@@ -37,12 +37,13 @@ resource "aws_codepipeline" "this" {
     dynamic "action" {
       for_each = var.tags == "" ? local.validation_stages : local.conditional_validation_stages
       content {
-        name            = action.key
-        category        = "Test"
-        owner           = "AWS"
-        provider        = "CodeBuild"
-        input_artifacts = ["source_output"]
-        version         = "1"
+        name             = action.key
+        category         = "Test"
+        owner            = "AWS"
+        provider         = "CodeBuild"
+        input_artifacts  = ["source_output"]
+        output_artifacts = ["${action.key}_output"]
+        version          = "1"
 
         configuration = {
           ProjectName = module.validation[action.key].codebuild_project.name

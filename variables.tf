@@ -142,17 +142,6 @@ variable "github_key" {
   default     = ""
 }
 
-variable "validation_stage_flags" {
-  description = "Dictates which validation stages to run. Supported values are validate, fmt, lint, and sast. Each stage can be set to true or false."
-  type        = map(string)
-  default = {
-    validate = true
-    fmt      = true
-    lint     = false
-    sast     = false
-  }
-}
-
 variable "assume_role_arn" {
   description = "IAM role ARN to assume for CodeBuild"
   type        = string
@@ -163,4 +152,65 @@ variable "manual_approve" {
   description = "Determines whether to add a manual approval step before the apply stage."
   type        = bool
   default     = true
+}
+
+
+variable "enable_notifications" {
+  description = "Enable notifications for the pipeline"
+  type        = bool
+  default     = true
+
+}
+
+
+variable "codebuild_event_ids" {
+  type = list(string)
+  default = [
+    "codebuild-project-build-state-failed",
+    "codebuild-project-build-state-succeeded"
+  ]
+}
+
+variable "codepipeline_event_ids" {
+  type = list(string)
+  default = [
+    "codepipeline-pipeline-pipeline-execution-failed",
+    "codepipeline-pipeline-pipeline-execution-canceled",
+    "codepipeline-pipeline-pipeline-execution-started",
+    "codepipeline-pipeline-pipeline-execution-resumed",
+    "codepipeline-pipeline-pipeline-execution-succeeded",
+    "codepipeline-pipeline-stage-execution-resumed",
+    "codepipeline-pipeline-stage-execution-failed",
+    "codepipeline-pipeline-stage-execution-canceled",
+    "codepipeline-pipeline-manual-approval-needed",
+  ]
+}
+
+
+variable "validation_sast_settings" {
+  description = "Settings for sast validation stage. Valid values for on_failure are the same as the codebuild on-failure settings."
+  type = object({
+    enabled             = optional(bool, true)
+    continue_on_failure = optional(bool, true)
+  })
+  default = {
+    enabled    = true
+    on_failure = true
+  }
+}
+
+
+variable "validation_lint_settings" {
+  description = "Settings for the lint validation stage. Valid values for on_failure are the same as the codebuild on-failure settings."
+
+  type = object({
+    enabled            = optional(bool, true)
+    contine_on_failure = optional(bool, true)
+  })
+
+  default = {
+    enabled             = true
+    continue_on_failure = true
+  }
+
 }

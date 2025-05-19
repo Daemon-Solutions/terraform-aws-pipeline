@@ -126,7 +126,8 @@ data "aws_iam_policy_document" "codebuild" {
     ]
 
     resources = [
-      aws_codebuild_report_group.sast.arn
+      aws_codebuild_report_group.sast.arn,
+      aws_codebuild_report_group.lint.arn
     ]
   }
 
@@ -169,6 +170,24 @@ resource "aws_codebuild_report_group" "sast" {
       encryption_key      = var.kms_key == null ? data.aws_kms_key.s3.arn : var.kms_key
       packaging           = "NONE"
       path                = "/sast"
+    }
+  }
+}
+
+resource "aws_codebuild_report_group" "lint" {
+  name           = "lint-report-${var.pipeline_name}"
+  type           = "TEST"
+  delete_reports = true
+
+  export_config {
+    type = "S3"
+
+    s3_destination {
+      bucket              = aws_s3_bucket.this.id
+      encryption_disabled = false
+      encryption_key      = var.kms_key == null ? data.aws_kms_key.s3.arn : var.kms_key
+      packaging           = "NONE"
+      path                = "/lint"
     }
   }
 }

@@ -202,6 +202,7 @@ No requirements.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_apply"></a> [apply](#module\_apply) | ./modules/codebuild | n/a |
+| <a name="module_notifications"></a> [notifications](#module\_notifications) | ./modules/notifications | n/a |
 | <a name="module_plan"></a> [plan](#module\_plan) | ./modules/codebuild | n/a |
 | <a name="module_validation"></a> [validation](#module\_validation) | ./modules/codebuild | n/a |
 
@@ -212,6 +213,7 @@ No requirements.
 | [aws_cloudwatch_event_rule.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
 | [aws_cloudwatch_event_target.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
 | [aws_cloudwatch_log_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_codebuild_report_group.lint](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codebuild_report_group) | resource |
 | [aws_codebuild_report_group.sast](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codebuild_report_group) | resource |
 | [aws_codepipeline.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codepipeline) | resource |
 | [aws_iam_policy.codebuild_validate](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
@@ -255,9 +257,12 @@ No requirements.
 | <a name="input_build_timeout"></a> [build\_timeout](#input\_build\_timeout) | CodeBuild project build timeout | `number` | `10` | no |
 | <a name="input_checkov_skip"></a> [checkov\_skip](#input\_checkov\_skip) | list of checkov checks to skip | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | <a name="input_checkov_version"></a> [checkov\_version](#input\_checkov\_version) | n/a | `string` | `"3.2.0"` | no |
+| <a name="input_codebuild_event_ids"></a> [codebuild\_event\_ids](#input\_codebuild\_event\_ids) | n/a | `list(string)` | <pre>[<br>  "codebuild-project-build-state-failed",<br>  "codebuild-project-build-state-succeeded"<br>]</pre> | no |
 | <a name="input_codebuild_policy"></a> [codebuild\_policy](#input\_codebuild\_policy) | replaces CodeBuild's AWSAdministratorAccess IAM policy | `string` | `null` | no |
+| <a name="input_codepipeline_event_ids"></a> [codepipeline\_event\_ids](#input\_codepipeline\_event\_ids) | n/a | `list(string)` | <pre>[<br>  "codepipeline-pipeline-pipeline-execution-failed",<br>  "codepipeline-pipeline-pipeline-execution-canceled",<br>  "codepipeline-pipeline-pipeline-execution-started",<br>  "codepipeline-pipeline-pipeline-execution-resumed",<br>  "codepipeline-pipeline-pipeline-execution-succeeded",<br>  "codepipeline-pipeline-stage-execution-resumed",<br>  "codepipeline-pipeline-stage-execution-failed",<br>  "codepipeline-pipeline-stage-execution-canceled",<br>  "codepipeline-pipeline-manual-approval-needed"<br>]</pre> | no |
 | <a name="input_connection"></a> [connection](#input\_connection) | arn of the CodeConnection | `string` | `null` | no |
 | <a name="input_detect_changes"></a> [detect\_changes](#input\_detect\_changes) | allows third-party servicesm like GitHub to invoke the pipeline | `bool` | `false` | no |
+| <a name="input_enable_notifications"></a> [enable\_notifications](#input\_enable\_notifications) | Enable notifications for the pipeline | `bool` | `true` | no |
 | <a name="input_env_vars"></a> [env\_vars](#input\_env\_vars) | Extra environment variables to be passed to CodeBuild | `map(string)` | `{}` | no |
 | <a name="input_github_key"></a> [github\_key](#input\_github\_key) | GitHub private key to access interal repositories | `string` | `""` | no |
 | <a name="input_kms_key"></a> [kms\_key](#input\_kms\_key) | AWS KMS key ARN | `string` | `null` | no |
@@ -272,9 +277,12 @@ No requirements.
 | <a name="input_tags"></a> [tags](#input\_tags) | tags to check for | `string` | `""` | no |
 | <a name="input_terraform_version"></a> [terraform\_version](#input\_terraform\_version) | n/a | `string` | `"1.5.7"` | no |
 | <a name="input_tflint_version"></a> [tflint\_version](#input\_tflint\_version) | n/a | `string` | `"0.48.0"` | no |
-| <a name="input_validation_stage_flags"></a> [validation\_stage\_flags](#input\_validation\_stage\_flags) | Dictates which validation stages to run. Supported values are validate, fmt, lint, and sast. Each stage can be set to true or false. | `map(string)` | <pre>{<br>  "fmt": true,<br>  "lint": false,<br>  "sast": false,<br>  "validate": {<br>    "enabled": true,<br>    "on_failure": "CONTINUE"<br>  }<br>}</pre> | no |
+| <a name="input_validation_lint_settings"></a> [validation\_lint\_settings](#input\_validation\_lint\_settings) | Settings for the lint validation stage. Valid values for on\_failure are the same as the codebuild on-failure settings. | <pre>object({<br>    enabled            = optional(bool, true)<br>    contine_on_failure = optional(bool, true)<br>  })</pre> | <pre>{<br>  "continue_on_failure": true,<br>  "enabled": true<br>}</pre> | no |
+| <a name="input_validation_sast_settings"></a> [validation\_sast\_settings](#input\_validation\_sast\_settings) | Settings for sast validation stage. Valid values for on\_failure are the same as the codebuild on-failure settings. | <pre>object({<br>    enabled             = optional(bool, true)<br>    continue_on_failure = optional(bool, true)<br>  })</pre> | <pre>{<br>  "enabled": true,<br>  "on_failure": true<br>}</pre> | no |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_notification_sns_topic_arn"></a> [notification\_sns\_topic\_arn](#output\_notification\_sns\_topic\_arn) | SNS topic ARN for notifications |
 <!-- END_TF_DOCS -->
