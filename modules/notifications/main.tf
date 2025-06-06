@@ -17,11 +17,7 @@ resource "aws_codestarnotifications_notification_rule" "codepipeline_updates" {
 }
 
 resource "aws_codestarnotifications_notification_rule" "codebuild_updates" {
-  for_each = {
-    for k, v in var.codebuild_projects :
-    k => v
-    if length(compact(try(var.codebuild_event_ids, []))) > 0
-  }
+  for_each       = var.codebuild_event_ids != null && length(var.codebuild_event_ids) > 0 ? var.codebuild_projects : {}
   detail_type    = "FULL"
   event_type_ids = var.codebuild_event_ids
   name           = "slackNotification-${each.key}"
