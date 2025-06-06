@@ -123,14 +123,24 @@ variable "apply_spec" {
   type        = string
 }
 
+
 variable "env_vars" {
-  description = "Extra environment variables to be passed to CodeBuild"
+  description = <<EOF
+Global environment variables to pass to all CodeBuild projects.
+
+These are merged with per-repository `env_vars` defined in `terraform_repos`, with the per-repository values taking precedence in case of overlap.
+EOF
   type        = map(string)
   default     = {}
 }
 
 variable "source_dir" {
-  description = "CodeBuild source directory"
+  description = <<EOF
+Root directory of the repository checked out by CodeBuild.
+
+All paths defined in `terraform_repos[*].path` are relative to this directory.
+If `terraform_repos` is empty, this directory is assumed to contain a single Terraform repository.
+EOF
   type        = string
   default     = "."
 }
@@ -213,4 +223,25 @@ variable "validation_lint_settings" {
     continue_on_failure = true
   }
 
+}
+
+variable "terraform_repos" {
+  description = <<EOF
+Defines a list of Terraform sub-repositories for multi-repo support within a single pipeline.
+
+Each object represents a logical Terraform component and must include:
+- `path`: A relative path from the `source_dir` to the root of the Terraform configuration.
+- `repo_id`: A unique identifier for the component. This is used to name CodeBuild projects and must be unique across all entries.
+- `env_vars`: A map of environment variables to inject into the CodeBuild environment for this component.
+
+If this list is empty, the pipeline treats the entire `source_dir` as a single Terraform repository and falls back to default behavior.
+EOF
+
+  type = list(object({
+    path     = string
+    repo_id  = string
+    env_vars = optional(map(string), {})
+  }))
+
+  default = []
 }

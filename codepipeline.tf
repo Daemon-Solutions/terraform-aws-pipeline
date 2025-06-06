@@ -52,22 +52,27 @@ resource "aws_codepipeline" "this" {
     }
   }
 
+
   stage {
     name = "Plan"
-    action {
-      name             = "Plan"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      input_artifacts  = ["source_output"]
-      output_artifacts = ["plan_output"]
-      version          = "1"
-      run_order        = 1
+    dynamic "action" {
+      for_each = { for r in local.terraform_repos : r.repo_id => r }
+      content {
 
-      configuration = {
-        ProjectName = module.plan.codebuild_project.name
+        name             = "${action.key}-plan"
+        category         = "Build"
+        owner            = "AWS"
+        provider         = "CodeBuild"
+        input_artifacts  = ["source_output"]
+        output_artifacts = ["plan_output_${action.key}"]
+        version          = "1"
+        run_order        = 1
+        configuration = {
+          ProjectName = module.plan[action.key].codebuild_project.name
+        }
       }
     }
+
     dynamic "action" {
       for_each = var.manual_approve ? [1] : []
       content {
@@ -87,16 +92,19 @@ resource "aws_codepipeline" "this" {
 
   stage {
     name = "Apply"
-    action {
-      name            = "Apply"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
-      input_artifacts = ["plan_output"]
-      version         = "1"
+    dynamic "action" {
+      for_each = { for r in local.terraform_repos : r.repo_id => r }
+      content {
+        name            = "${action.key}-apply"
+        category        = "Build"
+        owner           = "AWS"
+        provider        = "CodeBuild"
+        input_artifacts = ["plan_output_${action.key}"]
+        version         = "1"
 
-      configuration = {
-        ProjectName = module.apply.codebuild_project.name
+        configuration = {
+          ProjectName = module.apply[action.key].codebuild_project.name
+        }
       }
     }
   }

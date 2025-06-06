@@ -195,7 +195,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.98.0 |
 
 ## Modules
 
@@ -263,7 +263,7 @@ No requirements.
 | <a name="input_connection"></a> [connection](#input\_connection) | arn of the CodeConnection | `string` | `null` | no |
 | <a name="input_detect_changes"></a> [detect\_changes](#input\_detect\_changes) | allows third-party servicesm like GitHub to invoke the pipeline | `bool` | `false` | no |
 | <a name="input_enable_notifications"></a> [enable\_notifications](#input\_enable\_notifications) | Enable notifications for the pipeline | `bool` | `true` | no |
-| <a name="input_env_vars"></a> [env\_vars](#input\_env\_vars) | Extra environment variables to be passed to CodeBuild | `map(string)` | `{}` | no |
+| <a name="input_env_vars"></a> [env\_vars](#input\_env\_vars) | Global environment variables to pass to all CodeBuild projects.<br><br>These are merged with per-repository `env_vars` defined in `terraform_repos`, with the per-repository values taking precedence in case of overlap. | `map(string)` | `{}` | no |
 | <a name="input_github_key"></a> [github\_key](#input\_github\_key) | GitHub private key to access interal repositories | `string` | `""` | no |
 | <a name="input_kms_key"></a> [kms\_key](#input\_kms\_key) | AWS KMS key ARN | `string` | `null` | no |
 | <a name="input_log_retention"></a> [log\_retention](#input\_log\_retention) | CloudWatch log group retention, in days | `number` | `90` | no |
@@ -272,9 +272,10 @@ No requirements.
 | <a name="input_pipeline_name"></a> [pipeline\_name](#input\_pipeline\_name) | n/a | `string` | n/a | yes |
 | <a name="input_plan_spec"></a> [plan\_spec](#input\_plan\_spec) | plan spec file | `string` | n/a | yes |
 | <a name="input_repo"></a> [repo](#input\_repo) | source repo name | `string` | n/a | yes |
-| <a name="input_source_dir"></a> [source\_dir](#input\_source\_dir) | CodeBuild source directory | `string` | `"."` | no |
+| <a name="input_source_dir"></a> [source\_dir](#input\_source\_dir) | Root directory of the repository checked out by CodeBuild.<br><br>All paths defined in `terraform_repos[*].path` are relative to this directory.<br>If `terraform_repos` is empty, this directory is assumed to contain a single Terraform repository. | `string` | `"."` | no |
 | <a name="input_tagnag_version"></a> [tagnag\_version](#input\_tagnag\_version) | n/a | `string` | `"0.5.8"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | tags to check for | `string` | `""` | no |
+| <a name="input_terraform_repos"></a> [terraform\_repos](#input\_terraform\_repos) | Defines a list of Terraform sub-repositories for multi-repo support within a single pipeline.<br><br>Each object represents a logical Terraform component and must include:<br>- `path`: A relative path from the `source_dir` to the root of the Terraform configuration.<br>- `repo_id`: A unique identifier for the component. This is used to name CodeBuild projects and must be unique across all entries.<br>- `env_vars`: A map of environment variables to inject into the CodeBuild environment for this component.<br><br>If this list is empty, the pipeline treats the entire `source_dir` as a single Terraform repository and falls back to default behavior. | <pre>list(object({<br>    path     = string<br>    repo_id  = string<br>    env_vars = optional(map(string), {})<br>  }))</pre> | `[]` | no |
 | <a name="input_terraform_version"></a> [terraform\_version](#input\_terraform\_version) | n/a | `string` | `"1.5.7"` | no |
 | <a name="input_tflint_version"></a> [tflint\_version](#input\_tflint\_version) | n/a | `string` | `"0.48.0"` | no |
 | <a name="input_validation_lint_settings"></a> [validation\_lint\_settings](#input\_validation\_lint\_settings) | Settings for the lint validation stage. Valid values for on\_failure are the same as the codebuild on-failure settings. | <pre>object({<br>    enabled             = optional(bool, true)<br>    continue_on_failure = optional(bool, true)<br>  })</pre> | <pre>{<br>  "continue_on_failure": true,<br>  "enabled": true<br>}</pre> | no |
