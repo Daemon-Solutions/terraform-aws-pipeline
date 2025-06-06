@@ -240,7 +240,7 @@ EOF
   type = list(object({
     path     = string
     repo_id  = string
-    env_vars = map(string)
+    env_vars = optional(map(string), {})
   }))
 
   default = []
