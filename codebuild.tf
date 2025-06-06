@@ -14,28 +14,35 @@ module "validation" {
 }
 
 module "plan" {
-  source                = "./modules/codebuild"
-  codebuild_name        = "${var.pipeline_name}-plan"
-  codebuild_role        = aws_iam_role.codebuild_execution.arn
-  environment_variables = local.env_var
-  build_timeout         = var.build_timeout
-  build_spec            = "plan.yml"
-  build_spec_override   = var.plan_spec
-  log_group             = aws_cloudwatch_log_group.this.name
-  image                 = "hashicorp/terraform:${var.terraform_version}"
+  for_each       = { for r in local.terraform_repos : r.repo_id => r }
+  source         = "./modules/codebuild"
+  codebuild_name = "${each.key}-plan"
+  codebuild_role = aws_iam_role.codebuild_execution.arn
+  environment_variables = merge(local.env_var, each.value.env_vars, {
+    SOURCE_DIR = each.value.path
+  })
+  build_timeout       = var.build_timeout
+  build_spec          = "plan.yml"
+  build_spec_override = var.plan_spec
+  log_group           = aws_cloudwatch_log_group.this.name
+  image               = "hashicorp/terraform:${var.terraform_version}"
 }
 
 module "apply" {
-  source                = "./modules/codebuild"
-  codebuild_name        = "${var.pipeline_name}-apply"
-  codebuild_role        = aws_iam_role.codebuild_execution.arn
-  environment_variables = local.env_var
-  build_timeout         = var.build_timeout
-  build_spec            = "apply.yml"
-  build_spec_override   = var.apply_spec
-  log_group             = aws_cloudwatch_log_group.this.name
-  image                 = "hashicorp/terraform:${var.terraform_version}"
+  for_each       = { for r in local.terraform_repos : r.repo_id => r }
+  source         = "./modules/codebuild"
+  codebuild_name = "${each.key}-apply"
+  codebuild_role = aws_iam_role.codebuild_execution.arn
+  environment_variables = merge(local.env_var, each.value.env_vars, {
+    SOURCE_DIR = each.value.path
+  })
+  build_timeout       = var.build_timeout
+  build_spec          = "apply.yml"
+  build_spec_override = var.apply_spec
+  log_group           = aws_cloudwatch_log_group.this.name
+  image               = "hashicorp/terraform:${var.terraform_version}"
 }
+
 
 resource "aws_iam_role" "codebuild_validate" {
   name               = "${var.pipeline_name}-codebuild-validate"
@@ -78,11 +85,11 @@ data "aws_iam_policy_document" "codebuild_execution_assume" {
     }
 
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "aws:SourceArn"
       values = [
-        "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${var.pipeline_name}-plan",
-        "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${var.pipeline_name}-apply"
+        "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${var.pipeline_name}-*-plan",
+        "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${var.pipeline_name}-*-apply"
       ]
     }
   }

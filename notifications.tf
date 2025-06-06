@@ -1,14 +1,3 @@
-locals {
-  codebuild_projects = merge({
-    for stage, _ in var.tags == "" ? local.validation_stages : local.conditional_validation_stages :
-    module.validation[stage].codebuild_project.name => module.validation[stage].codebuild_project.arn
-    },
-    {
-      (module.plan.codebuild_project.name)  = module.plan.codebuild_project.arn
-      (module.apply.codebuild_project.name) = module.apply.codebuild_project.arn
-  })
-
-}
 module "notifications" {
   count               = var.enable_notifications ? 1 : 0
   source              = "./modules/notifications"

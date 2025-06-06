@@ -3,6 +3,7 @@ resource "aws_sns_topic" "topic" {
 }
 
 resource "aws_codestarnotifications_notification_rule" "codepipeline_updates" {
+  count          = length(compact(try(var.codepipeline_event_ids, []))) > 0 ? 1 : 0
   detail_type    = "FULL"
   event_type_ids = var.codepipeline_event_ids
   name           = "slackNotification-${var.codepipeline_project.name}"
@@ -16,7 +17,11 @@ resource "aws_codestarnotifications_notification_rule" "codepipeline_updates" {
 }
 
 resource "aws_codestarnotifications_notification_rule" "codebuild_updates" {
-  for_each       = var.codebuild_projects
+  for_each = {
+    for k, v in var.codebuild_projects :
+    k => v
+    if length(compact(try(var.codebuild_event_ids, []))) > 0
+  }
   detail_type    = "FULL"
   event_type_ids = var.codebuild_event_ids
   name           = "slackNotification-${each.key}"

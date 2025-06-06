@@ -37,4 +37,32 @@ locals {
     TAGS           = var.tags
     TAGNAG_VERSION = var.tagnag_version
   })
+
+  codebuild_projects = merge({
+    for stage, _ in var.tags == "" ? local.validation_stages : local.conditional_validation_stages :
+    module.validation[stage].codebuild_project.name => module.validation[stage].codebuild_project.arn
+    },
+    {
+      for repo in local.terraform_repos :
+      module.plan[repo.repo_id].codebuild_project.name => module.plan[repo.repo_id].codebuild_project.arn
+    },
+    {
+      for repo in local.terraform_repos :
+      module.apply[repo.repo_id].codebuild_project.name => module.apply[repo.repo_id].codebuild_project.arn
+    }
+  )
+
+
+  terraform_repos = length(var.terraform_repos) > 0 ? [
+    for r in var.terraform_repos : {
+      path     = join("/", [trim(var.source_dir, "/"), trim(r.path, "/")])
+      repo_id  = "${var.pipeline_name}-${r.repo_id}"
+      env_vars = r.env_vars
+    }] : [
+    {
+      path     = "."
+      repo_id  = var.pipeline_name
+      env_vars = var.env_vars
+    }
+  ]
 }
