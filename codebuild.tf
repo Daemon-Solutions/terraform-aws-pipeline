@@ -85,11 +85,10 @@ data "aws_iam_policy_document" "codebuild_execution_assume" {
     }
 
     condition {
-      test     = "StringLike"
+      test     = "ArnLike"
       variable = "aws:SourceArn"
       values = [
-        "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${var.pipeline_name}-*-plan",
-        "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${var.pipeline_name}-*-apply"
+        "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${var.pipeline_name}-*"
       ]
     }
   }

@@ -60,7 +60,7 @@ locals {
       env_vars = r.env_vars
     }] : [
     {
-      path     = "."
+      path     = var.source_dir
       repo_id  = var.pipeline_name
       env_vars = var.env_vars
     }
