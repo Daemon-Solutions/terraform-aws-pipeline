@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release: 
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Install Semantic Dependencies
+        run: |
+            npm i --save-dev conventional-changelog-conventionalcommits@6 &&
+            npm i --save-dev @aensley/semantic-release-openapi
+      - name: Semantic Release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v4.0.0
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/git
+          dry_run: true
+ 
