@@ -245,3 +245,12 @@ EOF
 
   default = []
 }
+
+variable "additional_codebuild_statements" {
+  type = list(object({
+    effect    = string
+    actions   = list(string)
+    resources = list(string)
+  }))
+  default = []
+}

@@ -161,19 +161,14 @@ data "aws_iam_policy_document" "codebuild" {
     ]
   }
 
-  statement {
-    effect = "Allow"
-    actions = [
-      "ssm:DeleteParameter",
-      "ssm:GetParameterHistory",
-      "ssm:GetParametersByPath",
-      "ssm:GetParameters",
-      "ssm:GetParameter",
-    ]
+  dynamic "statement" {
+    for_each = var.additional_codebuild_statements
 
-    resources = [
-      "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/infracost/api-key"
-    ]
+    content {
+      effect    = statement.value.effect
+      actions   = statement.value.actions
+      resources = statement.value.resources
+    }
   }
 }
 resource "aws_codebuild_report_group" "sast" {
