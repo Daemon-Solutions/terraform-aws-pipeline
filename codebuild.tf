@@ -160,8 +160,17 @@ data "aws_iam_policy_document" "codebuild" {
       "*"
     ]
   }
-}
 
+  dynamic "statement" {
+    for_each = var.additional_codebuild_statements
+
+    content {
+      effect    = statement.value.effect
+      actions   = statement.value.actions
+      resources = statement.value.resources
+    }
+  }
+}
 resource "aws_codebuild_report_group" "sast" {
   name           = "sast-report-${var.pipeline_name}"
   type           = "TEST"
