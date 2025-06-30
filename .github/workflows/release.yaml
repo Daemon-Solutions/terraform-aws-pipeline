@@ -32,5 +32,4 @@ jobs:
           extra_plugins: |
             @semantic-release/changelog
             @semantic-release/git
-          dry_run: true
  
