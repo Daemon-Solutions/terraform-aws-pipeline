@@ -254,3 +254,10 @@ variable "additional_codebuild_statements" {
   }))
   default = []
 }
+
+
+variable "notification_name_prefix" {
+  description = "Prefix to use for Codestar notification rule names if enable_notifications is true."
+  type        = string
+  default     = "ciNotifications"
+}
