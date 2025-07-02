@@ -1,3 +1,9 @@
+## [0.5.0](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.4.0...v0.5.0) (2025-07-02)
+
+### Features
+
+* use new notification module ([4b7304a](https://github.com/Daemon-Solutions/terraform-aws-pipeline/commit/4b7304a5b9b2255aca874d898be215ca1f487ab9))
+
 ## [0.4.0](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.3.1...v0.4.0) (2025-06-30)
 
 
