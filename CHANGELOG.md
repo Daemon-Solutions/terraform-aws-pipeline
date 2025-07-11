@@ -1,3 +1,9 @@
+## [0.6.0](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.5.0...v0.6.0) (2025-07-11)
+
+### Features
+
+* Removed staging notifications ([#10](https://github.com/Daemon-Solutions/terraform-aws-pipeline/issues/10)) ([aee4cae](https://github.com/Daemon-Solutions/terraform-aws-pipeline/commit/aee4cae39ce331032c21c7c91b94f59eb345e199))
+
 ## [0.5.0](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.4.0...v0.5.0) (2025-07-02)
 
 ### Features
