@@ -81,7 +81,7 @@ variable "mode" {
       "PARALLEL",
       "QUEUED"
     ], var.mode)
-    error_message = "unsupported pipeline mode"
+    error_message = "Unsupported pipeline mode."
   }
 }
 
@@ -189,9 +189,6 @@ variable "codepipeline_event_ids" {
     "codepipeline-pipeline-pipeline-execution-started",
     "codepipeline-pipeline-pipeline-execution-resumed",
     "codepipeline-pipeline-pipeline-execution-succeeded",
-    "codepipeline-pipeline-stage-execution-resumed",
-    "codepipeline-pipeline-stage-execution-failed",
-    "codepipeline-pipeline-stage-execution-canceled",
     "codepipeline-pipeline-manual-approval-needed",
   ]
 }
@@ -204,25 +201,22 @@ variable "validation_sast_settings" {
     continue_on_failure = optional(bool, true)
   })
   default = {
-    enabled    = true
-    on_failure = true
+    enabled             = true
+    continue_on_failure = true
   }
 }
 
 
 variable "validation_lint_settings" {
   description = "Settings for the lint validation stage. Valid values for on_failure are the same as the codebuild on-failure settings."
-
   type = object({
     enabled             = optional(bool, true)
     continue_on_failure = optional(bool, true)
   })
-
   default = {
     enabled             = true
     continue_on_failure = true
   }
-
 }
 
 variable "terraform_repos" {
@@ -242,7 +236,6 @@ EOF
     repo_id  = string
     env_vars = optional(map(string), {})
   }))
-
   default = []
 }
 
