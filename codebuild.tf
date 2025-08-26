@@ -1,6 +1,20 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
+module "check_directory" {
+  source         = "./modules/codebuild"
+  codebuild_name = "check-dir-plan"
+  codebuild_role = aws_iam_role.codebuild_execution.arn
+  environment_variables = {
+    SOURCE_DIR = var.source_dir
+  }
+  build_timeout       = var.build_timeout
+  build_spec          = "check_dir.yml"
+  build_spec_override = var.plan_spec
+  log_group           = aws_cloudwatch_log_group.this.name
+  image               = "hashicorp/terraform:${var.terraform_version}"
+}
+
 module "validation" {
   for_each              = var.tags == "" ? local.validation_stages : local.conditional_validation_stages
   source                = "./modules/codebuild"
