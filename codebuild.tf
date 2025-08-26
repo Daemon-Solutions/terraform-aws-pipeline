@@ -1,6 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
+#test
 module "validation" {
   for_each              = var.tags == "" ? local.validation_stages : local.conditional_validation_stages
   source                = "./modules/codebuild"
