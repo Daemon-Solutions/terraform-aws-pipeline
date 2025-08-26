@@ -2,17 +2,17 @@
 // SPDX-License-Identifier: MIT-0
 
 module "check_directory" {
+  for_each       = { for r in local.terraform_repos : r.repo_id => r }
   source         = "./modules/codebuild"
-  codebuild_name = "check-dir-plan"
+  codebuild_name = "${each.key}-check-dir"
   codebuild_role = aws_iam_role.codebuild_execution.arn
   environment_variables = {
-    SOURCE_DIR = var.source_dir
+    SOURCE_DIR = each.value.path
   }
-  build_timeout       = var.build_timeout
-  build_spec          = "check_dir.yml"
-  build_spec_override = var.plan_spec
-  log_group           = aws_cloudwatch_log_group.this.name
-  image               = "hashicorp/terraform:${var.terraform_version}"
+  build_timeout = var.build_timeout
+  build_spec    = "check_dir.yml"
+  log_group     = aws_cloudwatch_log_group.this.name
+  image         = "aws/codebuild/standard:5.0"
 }
 
 module "validation" {
