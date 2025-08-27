@@ -1,7 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-# Add this single module for the all-or-nothing check
 module "check_all_changes" {
   source                = "./modules/codebuild"
   codebuild_name        = "${var.pipeline_name}-check-all-changes"
