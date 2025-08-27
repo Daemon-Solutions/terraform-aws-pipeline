@@ -34,20 +34,17 @@ resource "aws_codepipeline" "this" {
 
   stage {
     name = "CheckChanges"
-    dynamic "action" {
-      for_each = { for r in local.terraform_repos : r.repo_id => r }
-      content {
-        name            = "${action.key}-check-changes"
-        category        = "Build"
-        owner           = "AWS"
-        provider        = "CodeBuild"
-        input_artifacts = ["source_output"]
-        version         = "1"
-        run_order       = 1
+    action {
+      name            = "Check-For-Terraform-Changes"
+      category        = "Build"
+      owner           = "AWS"
+      provider        = "CodeBuild"
+      input_artifacts = ["source_output"]
+      version         = "1"
+      run_order       = 1
 
-        configuration = {
-          ProjectName = module.check_directory[action.key].codebuild_project.name
-        }
+      configuration = {
+        ProjectName = module.check_all_changes.codebuild_project.name
       }
     }
   }
