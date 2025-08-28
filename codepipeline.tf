@@ -35,7 +35,7 @@ resource "aws_codepipeline" "this" {
   stage {
     name = "CheckChanges"
     action {
-      name            = "Check-For-Terraform-Changes"
+      name            = "check-directory-changes"
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
@@ -44,7 +44,7 @@ resource "aws_codepipeline" "this" {
       run_order       = 1
 
       configuration = {
-        ProjectName = module.check_all_changes.codebuild_project.name
+        ProjectName = module.check_directory.codebuild_project.name
       }
     }
   }

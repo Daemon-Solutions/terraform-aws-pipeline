@@ -1,14 +1,17 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-module "check_all_changes" {
-  source                = "./modules/codebuild"
-  codebuild_name        = "${var.pipeline_name}-check-all-changes"
-  codebuild_role        = aws_iam_role.codebuild_execution.arn
-  environment_variables = {}
-  build_spec            = "check_all_changes.yml"
-  log_group             = aws_cloudwatch_log_group.this.name
-  image                 = "aws/codebuild/standard:5.0"
+module "check_directory" {
+  source         = "./modules/codebuild"
+  codebuild_name = "${var.pipeline_name}-check-dir"
+  codebuild_role = aws_iam_role.codebuild_execution.arn
+  environment_variables = {
+    SOURCE_DIR = var.source_dir
+  }
+  build_timeout = var.build_timeout
+  build_spec    = "check_dir.yml"
+  log_group     = aws_cloudwatch_log_group.this.name
+  image         = "aws/codebuild/standard:5.0"
 }
 
 module "validation" {
