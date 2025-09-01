@@ -1,3 +1,9 @@
+## [0.7.0](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.6.0...v0.7.0) (2025-09-01)
+
+### Features
+
+* **sd-4497:** add check changes step ([#11](https://github.com/Daemon-Solutions/terraform-aws-pipeline/issues/11)) ([7694905](https://github.com/Daemon-Solutions/terraform-aws-pipeline/commit/7694905c77fa77d9709c07dc450d3a6fb5b6aca3))
+
 ## [0.6.0](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.5.0...v0.6.0) (2025-07-11)
 
 ### Features
