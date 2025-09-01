@@ -3,8 +3,7 @@ version: 0.2
 phases:
   build:
     commands:
-      - echo "Checking for changes in directory: $SOURCE_DIR"
-      - git fetch --unshallow
+      - echo "Checking for changes in directory $SOURCE_DIR"
       - CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | xargs -n1 dirname | sort -u)
       - |
         if echo "$CHANGED_DIRS" | grep -q "^${SOURCE_DIR}"; then

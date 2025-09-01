@@ -122,6 +122,11 @@ resource "aws_iam_policy" "codebuild_validate" {
   policy = data.aws_iam_policy_document.codebuild.json
 }
 
+resource "aws_iam_role_policy_attachment" "codebuild_validate_source_access" {
+  role       = aws_iam_role.codebuild_validate.name
+  policy_arn = aws_iam_policy.codepipeline.arn
+}
+
 data "aws_iam_policy_document" "codebuild" {
   statement {
     effect = "Allow"

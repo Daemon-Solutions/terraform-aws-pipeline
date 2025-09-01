@@ -28,6 +28,7 @@ resource "aws_codepipeline" "this" {
         BranchName           = var.branch
         PollForSourceChanges = var.connection == null ? false : null
         DetectChanges        = var.connection == null ? null : var.detect_changes
+        OutputArtifactFormat = "CODEBUILD_CLONE_REF"
       }
     }
   }

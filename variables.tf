@@ -62,7 +62,7 @@ variable "connection" {
 variable "detect_changes" {
   description = "allows third-party servicesm like GitHub to invoke the pipeline"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "log_retention" {
