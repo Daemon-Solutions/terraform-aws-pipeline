@@ -254,3 +254,4 @@ variable "notification_name_prefix" {
   type        = string
   default     = "ciNotifications"
 }
+

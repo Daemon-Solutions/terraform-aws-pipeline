@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo "Checking for changes in directory $SOURCE_DIR"
+      - CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | xargs -n1 dirname | sort -u)
+      - |
+        if echo "$CHANGED_DIRS" | grep -q "^${SOURCE_DIR}"; then
+          echo "Changes detected in '$SOURCE_DIR'. Proceeding with the pipeline."
+        else
+          echo "No changes detected in '$SOURCE_DIR'. Stopping this pipeline path."
+          exit 1
+        fi
