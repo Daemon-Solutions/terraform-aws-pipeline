@@ -37,7 +37,7 @@ resource "aws_codepipeline" "this" {
     name = "CheckChanges"
     action {
       name            = "check-directory-changes"
-      category        = "Build"
+      category        = "Test"
       owner           = "AWS"
       provider        = "CodeBuild"
       input_artifacts = ["source_output"]
@@ -45,7 +45,7 @@ resource "aws_codepipeline" "this" {
       run_order       = 1
 
       configuration = {
-        ProjectName = module.check_directory.codebuild_project.name
+        ProjectName = module.check_for_changes.codebuild_project.name
       }
     }
   }

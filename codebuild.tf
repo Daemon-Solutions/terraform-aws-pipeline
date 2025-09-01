@@ -1,10 +1,10 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-module "check_directory" {
+module "check_for_changes" {
   source         = "./modules/codebuild"
   codebuild_name = "${var.pipeline_name}-check-dir"
-  codebuild_role = aws_iam_role.codebuild_execution.arn
+  codebuild_role = aws_iam_role.codebuild_check_changes.arn
   environment_variables = {
     SOURCE_DIR = var.source_dir
   }
@@ -122,11 +122,6 @@ resource "aws_iam_policy" "codebuild_validate" {
   policy = data.aws_iam_policy_document.codebuild.json
 }
 
-resource "aws_iam_role_policy_attachment" "codebuild_validate_source_access" {
-  role       = aws_iam_role.codebuild_validate.name
-  policy_arn = aws_iam_policy.codepipeline.arn
-}
-
 data "aws_iam_policy_document" "codebuild" {
   statement {
     effect = "Allow"
@@ -138,6 +133,22 @@ data "aws_iam_policy_document" "codebuild" {
 
     resources = [
       "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "codecommit:GetBranch",
+      "codecommit:GetCommit",
+      "codecommit:UploadArchive",
+      "codecommit:GetUploadArchiveStatus",
+      "codecommit:CancelUploadArchive",
+      "codestar-connections:UseConnection"
+    ]
+
+    resources = [
+      var.connection == null ? "arn:aws:codecommit:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.repo}" : var.connection
     ]
   }
 
@@ -229,4 +240,54 @@ resource "aws_cloudwatch_log_group" "this" {
   name              = "/aws/codebuild/${var.pipeline_name}"
   retention_in_days = var.log_retention
   kms_key_id        = var.kms_key
+}
+
+resource "aws_iam_role" "codebuild_check_changes" {
+  name               = "${var.pipeline_name}-codebuild-check-changes-role"
+  assume_role_policy = data.aws_iam_policy_document.codebuild_execution_assume.json
+}
+
+data "aws_iam_policy_document" "codebuild_check_changes_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "codecommit:GetBranch",
+      "codecommit:GetCommit",
+      "codecommit:UploadArchive",
+      "codecommit:GetUploadArchiveStatus",
+      "codecommit:CancelUploadArchive",
+      "codestar-connections:UseConnection"
+    ]
+    resources = [
+      var.connection == null ? "arn:aws:codecommit:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.repo}" : var.connection
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion"
+    ]
+    resources = [
+      "${aws_s3_bucket.this.arn}/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "codebuild_check_changes" {
+  name   = "${var.pipeline_name}-codebuild-check-changes-policy"
+  policy = data.aws_iam_policy_document.codebuild_check_changes_policy.json
+}
+resource "aws_iam_role_policy_attachment" "codebuild_check_changes" {
+  role       = aws_iam_role.codebuild_check_changes.name
+  policy_arn = aws_iam_policy.codebuild_check_changes.arn
 }
