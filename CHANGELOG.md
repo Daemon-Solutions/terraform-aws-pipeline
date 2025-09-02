@@ -1,3 +1,9 @@
+## [0.7.1](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.7.0...v0.7.1) (2025-09-02)
+
+### Bug Fixes
+
+* fix regex expression to include / at the end of SOURCE_DIR ([#12](https://github.com/Daemon-Solutions/terraform-aws-pipeline/issues/12)) ([5288a62](https://github.com/Daemon-Solutions/terraform-aws-pipeline/commit/5288a62d2a9c5b3f71964b8f5e1376a39142b8a2))
+
 ## [0.7.0](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.6.0...v0.7.0) (2025-09-01)
 
 ### Features
