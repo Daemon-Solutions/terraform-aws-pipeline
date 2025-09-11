@@ -1,3 +1,9 @@
+## [0.7.2](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.7.1...v0.7.2) (2025-09-11)
+
+### Bug Fixes
+
+* fix the comparing of change dir to sourcedir by includ… ([#13](https://github.com/Daemon-Solutions/terraform-aws-pipeline/issues/13)) ([53e9c07](https://github.com/Daemon-Solutions/terraform-aws-pipeline/commit/53e9c07e8e122ad112a0e8a47b28315c3928875e))
+
 ## [0.7.1](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.7.0...v0.7.1) (2025-09-02)
 
 ### Bug Fixes
