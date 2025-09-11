@@ -4,7 +4,7 @@ phases:
   build:
     commands:
       - echo "Checking for changes in directory $SOURCE_DIR"
-      - CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | xargs -n1 dirname | sort -u)
+      - CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | xargs -n1 dirname | sort -u | xargs -I{} echo {}/)
       - |
         if echo "$CHANGED_DIRS" | grep -q "^${SOURCE_DIR}/"; then
           echo "Changes detected in '$SOURCE_DIR'. Proceeding with the pipeline."
