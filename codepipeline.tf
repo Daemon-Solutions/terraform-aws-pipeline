@@ -33,23 +33,6 @@ resource "aws_codepipeline" "this" {
     }
   }
 
-  # stage {
-  #   name = "CheckChanges"
-  #   action {
-  #     name            = "check-directory-changes"
-  #     category        = "Test"
-  #     owner           = "AWS"
-  #     provider        = "CodeBuild"
-  #     input_artifacts = ["source_output"]
-  #     version         = "1"
-  #     run_order       = 1
-
-  #     configuration = {
-  #       ProjectName = module.check_for_changes.codebuild_project.name
-  #     }
-  #   }
-  # }
-
   stage {
     name = "Validation"
     dynamic "action" {
