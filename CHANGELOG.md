@@ -1,3 +1,10 @@
+## [0.8.0](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.7.2...v0.8.0) (2025-10-01)
+
+### Features
+
+* **sd-4577:** commenting Check_for_changes stage ([cb6f35f](https://github.com/Daemon-Solutions/terraform-aws-pipeline/commit/cb6f35f6039d4e42d165de556ece7338048dfcdd))
+* **sd-4577:** commenting Check_for_changes stage ([1b34345](https://github.com/Daemon-Solutions/terraform-aws-pipeline/commit/1b34345696a2e455e562e913202f08efb7c80732))
+
 ## [0.7.2](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.7.1...v0.7.2) (2025-09-11)
 
 ### Bug Fixes
