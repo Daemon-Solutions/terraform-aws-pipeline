@@ -195,7 +195,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.3.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.15.0 |
 
 ## Modules
 
@@ -216,13 +216,16 @@ No requirements.
 | [aws_codebuild_report_group.lint](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codebuild_report_group) | resource |
 | [aws_codebuild_report_group.sast](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codebuild_report_group) | resource |
 | [aws_codepipeline.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codepipeline) | resource |
+| [aws_iam_policy.codebuild_check_changes](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.codebuild_validate](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.codepipeline](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.eventbridge](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_role.codebuild_check_changes](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.codebuild_execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.codebuild_validate](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.codepipeline_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.eventbridge](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachment.codebuild_check_changes](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.codebuild_execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.codebuild_validate](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.codepipeline](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
@@ -235,6 +238,7 @@ No requirements.
 | [aws_s3_bucket_server_side_encryption_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.codebuild](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.codebuild_check_changes_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.codebuild_execution_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.codebuild_validate_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.codepipeline](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -250,21 +254,22 @@ No requirements.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_access_logging_bucket"></a> [access\_logging\_bucket](#input\_access\_logging\_bucket) | s3 server access logging bucket arn | `string` | `null` | no |
-| <a name="input_additional_codebuild_statements"></a> [additional\_codebuild\_statements](#input\_additional\_codebuild\_statements) | n/a | <pre>list(object({<br/>    effect    = string<br/>    actions   = list(string)<br/>    resources = list(string)<br/>  }))</pre> | `[]` | no |
+| <a name="input_additional_codebuild_statements"></a> [additional\_codebuild\_statements](#input\_additional\_codebuild\_statements) | n/a | <pre>list(object({<br>    effect    = string<br>    actions   = list(string)<br>    resources = list(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_apply_spec"></a> [apply\_spec](#input\_apply\_spec) | apply spec file | `string` | n/a | yes |
 | <a name="input_artifact_retention"></a> [artifact\_retention](#input\_artifact\_retention) | s3 artifact bucket retention, in days | `number` | `90` | no |
 | <a name="input_assume_role_arn"></a> [assume\_role\_arn](#input\_assume\_role\_arn) | IAM role ARN to assume for CodeBuild | `string` | n/a | yes |
 | <a name="input_branch"></a> [branch](#input\_branch) | branch to source | `string` | `"main"` | no |
 | <a name="input_build_timeout"></a> [build\_timeout](#input\_build\_timeout) | CodeBuild project build timeout | `number` | `10` | no |
-| <a name="input_checkov_skip"></a> [checkov\_skip](#input\_checkov\_skip) | list of checkov checks to skip | `list(string)` | <pre>[<br/>  ""<br/>]</pre> | no |
+| <a name="input_check_terraform_code_fmt"></a> [check\_terraform\_code\_fmt](#input\_check\_terraform\_code\_fmt) | Whether to include a validation stage that runs 'terraform fmt -check'. | `bool` | `true` | no |
+| <a name="input_checkov_skip"></a> [checkov\_skip](#input\_checkov\_skip) | list of checkov checks to skip | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | <a name="input_checkov_version"></a> [checkov\_version](#input\_checkov\_version) | n/a | `string` | `"3.2.0"` | no |
-| <a name="input_codebuild_event_ids"></a> [codebuild\_event\_ids](#input\_codebuild\_event\_ids) | n/a | `list(string)` | <pre>[<br/>  "codebuild-project-build-state-failed",<br/>  "codebuild-project-build-state-succeeded"<br/>]</pre> | no |
+| <a name="input_codebuild_event_ids"></a> [codebuild\_event\_ids](#input\_codebuild\_event\_ids) | n/a | `list(string)` | <pre>[<br>  "codebuild-project-build-state-failed",<br>  "codebuild-project-build-state-succeeded"<br>]</pre> | no |
 | <a name="input_codebuild_policy"></a> [codebuild\_policy](#input\_codebuild\_policy) | replaces CodeBuild's AWSAdministratorAccess IAM policy | `string` | `null` | no |
-| <a name="input_codepipeline_event_ids"></a> [codepipeline\_event\_ids](#input\_codepipeline\_event\_ids) | n/a | `list(string)` | <pre>[<br/>  "codepipeline-pipeline-pipeline-execution-failed",<br/>  "codepipeline-pipeline-pipeline-execution-canceled",<br/>  "codepipeline-pipeline-pipeline-execution-started",<br/>  "codepipeline-pipeline-pipeline-execution-resumed",<br/>  "codepipeline-pipeline-pipeline-execution-succeeded",<br/>  "codepipeline-pipeline-manual-approval-needed"<br/>]</pre> | no |
+| <a name="input_codepipeline_event_ids"></a> [codepipeline\_event\_ids](#input\_codepipeline\_event\_ids) | n/a | `list(string)` | <pre>[<br>  "codepipeline-pipeline-pipeline-execution-failed",<br>  "codepipeline-pipeline-pipeline-execution-canceled",<br>  "codepipeline-pipeline-pipeline-execution-started",<br>  "codepipeline-pipeline-pipeline-execution-resumed",<br>  "codepipeline-pipeline-pipeline-execution-succeeded",<br>  "codepipeline-pipeline-manual-approval-needed"<br>]</pre> | no |
 | <a name="input_connection"></a> [connection](#input\_connection) | arn of the CodeConnection | `string` | `null` | no |
 | <a name="input_detect_changes"></a> [detect\_changes](#input\_detect\_changes) | allows third-party servicesm like GitHub to invoke the pipeline | `bool` | `false` | no |
 | <a name="input_enable_notifications"></a> [enable\_notifications](#input\_enable\_notifications) | Enable notifications for the pipeline | `bool` | `true` | no |
-| <a name="input_env_vars"></a> [env\_vars](#input\_env\_vars) | Global environment variables to pass to all CodeBuild projects.<br/><br/>These are merged with per-repository `env_vars` defined in `terraform_repos`, with the per-repository values taking precedence in case of overlap. | `map(string)` | `{}` | no |
+| <a name="input_env_vars"></a> [env\_vars](#input\_env\_vars) | Global environment variables to pass to all CodeBuild projects.<br><br>These are merged with per-repository `env_vars` defined in `terraform_repos`, with the per-repository values taking precedence in case of overlap. | `map(string)` | `{}` | no |
 | <a name="input_github_key"></a> [github\_key](#input\_github\_key) | GitHub private key to access interal repositories | `string` | `""` | no |
 | <a name="input_kms_key"></a> [kms\_key](#input\_kms\_key) | AWS KMS key ARN | `string` | `null` | no |
 | <a name="input_log_retention"></a> [log\_retention](#input\_log\_retention) | CloudWatch log group retention, in days | `number` | `90` | no |
@@ -274,18 +279,20 @@ No requirements.
 | <a name="input_pipeline_name"></a> [pipeline\_name](#input\_pipeline\_name) | n/a | `string` | n/a | yes |
 | <a name="input_plan_spec"></a> [plan\_spec](#input\_plan\_spec) | plan spec file | `string` | n/a | yes |
 | <a name="input_repo"></a> [repo](#input\_repo) | source repo name | `string` | n/a | yes |
-| <a name="input_source_dir"></a> [source\_dir](#input\_source\_dir) | Root directory of the repository checked out by CodeBuild.<br/><br/>All paths defined in `terraform_repos[*].path` are relative to this directory.<br/>If `terraform_repos` is empty, this directory is assumed to contain a single Terraform repository. | `string` | `"."` | no |
+| <a name="input_source_dir"></a> [source\_dir](#input\_source\_dir) | Root directory of the repository checked out by CodeBuild.<br><br>All paths defined in `terraform_repos[*].path` are relative to this directory.<br>If `terraform_repos` is empty, this directory is assumed to contain a single Terraform repository. | `string` | `"."` | no |
 | <a name="input_tagnag_version"></a> [tagnag\_version](#input\_tagnag\_version) | n/a | `string` | `"0.5.8"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | tags to check for | `string` | `""` | no |
-| <a name="input_terraform_repos"></a> [terraform\_repos](#input\_terraform\_repos) | Defines a list of Terraform sub-repositories for multi-repo support within a single pipeline.<br/><br/>Each object represents a logical Terraform component and must include:<br/>- `path`: A relative path from the `source_dir` to the root of the Terraform configuration.<br/>- `repo_id`: A unique identifier for the component. This is used to name CodeBuild projects and must be unique across all entries.<br/>- `env_vars`: A map of environment variables to inject into the CodeBuild environment for this component.<br/><br/>If this list is empty, the pipeline treats the entire `source_dir` as a single Terraform repository and falls back to default behavior. | <pre>list(object({<br/>    path     = string<br/>    repo_id  = string<br/>    env_vars = optional(map(string), {})<br/>  }))</pre> | `[]` | no |
+| <a name="input_terraform_repos"></a> [terraform\_repos](#input\_terraform\_repos) | Defines a list of Terraform sub-repositories for multi-repo support within a single pipeline.<br><br>Each object represents a logical Terraform component and must include:<br>- `path`: A relative path from the `source_dir` to the root of the Terraform configuration.<br>- `repo_id`: A unique identifier for the component. This is used to name CodeBuild projects and must be unique across all entries.<br>- `env_vars`: A map of environment variables to inject into the CodeBuild environment for this component.<br><br>If this list is empty, the pipeline treats the entire `source_dir` as a single Terraform repository and falls back to default behavior. | <pre>list(object({<br>    path     = string<br>    repo_id  = string<br>    env_vars = optional(map(string), {})<br>  }))</pre> | `[]` | no |
 | <a name="input_terraform_version"></a> [terraform\_version](#input\_terraform\_version) | n/a | `string` | `"1.5.7"` | no |
 | <a name="input_tflint_version"></a> [tflint\_version](#input\_tflint\_version) | n/a | `string` | `"0.48.0"` | no |
-| <a name="input_validation_lint_settings"></a> [validation\_lint\_settings](#input\_validation\_lint\_settings) | Settings for the lint validation stage. Valid values for on\_failure are the same as the codebuild on-failure settings. | <pre>object({<br/>    enabled             = optional(bool, true)<br/>    continue_on_failure = optional(bool, true)<br/>  })</pre> | <pre>{<br/>  "continue_on_failure": true,<br/>  "enabled": true<br/>}</pre> | no |
-| <a name="input_validation_sast_settings"></a> [validation\_sast\_settings](#input\_validation\_sast\_settings) | Settings for sast validation stage. Valid values for on\_failure are the same as the codebuild on-failure settings. | <pre>object({<br/>    enabled             = optional(bool, true)<br/>    continue_on_failure = optional(bool, true)<br/>  })</pre> | <pre>{<br/>  "continue_on_failure": true,<br/>  "enabled": true<br/>}</pre> | no |
+| <a name="input_validate_terraform_code"></a> [validate\_terraform\_code](#input\_validate\_terraform\_code) | Whether to include a validation stage that runs 'terraform validate'. | `bool` | `true` | no |
+| <a name="input_validation_lint_settings"></a> [validation\_lint\_settings](#input\_validation\_lint\_settings) | Settings for the lint validation stage. Valid values for on\_failure are the same as the codebuild on-failure settings. | <pre>object({<br>    enabled             = optional(bool, true)<br>    continue_on_failure = optional(bool, true)<br>  })</pre> | <pre>{<br>  "continue_on_failure": true,<br>  "enabled": true<br>}</pre> | no |
+| <a name="input_validation_sast_settings"></a> [validation\_sast\_settings](#input\_validation\_sast\_settings) | Settings for sast validation stage. Valid values for on\_failure are the same as the codebuild on-failure settings. | <pre>object({<br>    enabled             = optional(bool, true)<br>    continue_on_failure = optional(bool, true)<br>  })</pre> | <pre>{<br>  "continue_on_failure": true,<br>  "enabled": true<br>}</pre> | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
+| <a name="output_codepipeline_arn"></a> [codepipeline\_arn](#output\_codepipeline\_arn) | Codepipeline ARN |
 | <a name="output_notification_sns_topic_arn"></a> [notification\_sns\_topic\_arn](#output\_notification\_sns\_topic\_arn) | SNS topic ARN for notifications |
 <!-- END_TF_DOCS -->

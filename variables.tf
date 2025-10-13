@@ -255,3 +255,16 @@ variable "notification_name_prefix" {
   default     = "ciNotifications"
 }
 
+
+variable "validate_terraform_code" {
+  description = "Whether to include a validation stage that runs 'terraform validate'."
+  type        = bool
+  default     = true
+}
+
+
+variable "check_terraform_code_fmt" {
+  description = "Whether to include a validation stage that runs 'terraform fmt -check'."
+  type        = bool
+  default     = true
+}

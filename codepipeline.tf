@@ -28,7 +28,6 @@ resource "aws_codepipeline" "this" {
         BranchName           = var.branch
         PollForSourceChanges = var.connection == null ? false : null
         DetectChanges        = var.connection == null ? null : var.detect_changes
-        OutputArtifactFormat = "CODEBUILD_CLONE_REF"
       }
     }
   }
@@ -162,6 +161,7 @@ data "aws_iam_policy_document" "codepipeline" {
       "${aws_s3_bucket.this.arn}/*"
     ]
   }
+
 
   statement {
     effect = "Allow"
