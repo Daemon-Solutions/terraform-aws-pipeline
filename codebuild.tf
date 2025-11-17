@@ -26,7 +26,7 @@ module "plan" {
   build_spec          = "plan.yml"
   build_spec_override = var.plan_spec
   log_group           = aws_cloudwatch_log_group.this.name
-  image               = "alpine:latest"
+  image               = var.terraform_image
 }
 
 module "apply" {
@@ -42,7 +42,7 @@ module "apply" {
   build_spec          = "apply.yml"
   build_spec_override = var.apply_spec
   log_group           = aws_cloudwatch_log_group.this.name
-  image               = "alpine:latest"
+  image               = var.terraform_image
 }
 
 
