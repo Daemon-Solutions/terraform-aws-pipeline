@@ -1,6 +1,18 @@
 version: 0.2
 
 phases:
+  install:
+    commands:
+      - apk update && apk add make bash aws-cli python3 py3-pip git curl
+      - ln -sf python3 /usr/bin/python
+      - git clone https://github.com/tfutils/tfenv.git /usr/local/tfenv
+      - ln -s /usr/local/tfenv/bin/* /usr/local/bin/
+      - export PATH="$HOME/.tfenv/shims:$PATH"
+      
+  pre-build:
+    commands:
+      - tfenv install $TERRAFORM_VERSION
+      - tfenv use $TERRAFORM_VERSION
   build:
     commands:
       - cd "$CODEBUILD_SRC_DIR/$SOURCE_DIR"
