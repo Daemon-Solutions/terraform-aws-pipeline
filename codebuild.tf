@@ -19,13 +19,14 @@ module "plan" {
   codebuild_name = "${each.key}-plan"
   codebuild_role = aws_iam_role.codebuild_execution.arn
   environment_variables = merge(local.env_var, each.value.env_vars, {
-    SOURCE_DIR = each.value.path
+    SOURCE_DIR        = each.value.path
+    TERRAFORM_VERSION = var.terraform_version
   })
   build_timeout       = var.build_timeout
   build_spec          = "plan.yml"
   build_spec_override = var.plan_spec
   log_group           = aws_cloudwatch_log_group.this.name
-  image               = "hashicorp/terraform:${var.terraform_version}"
+  image               = "alpine:latest"
 }
 
 module "apply" {
@@ -34,13 +35,14 @@ module "apply" {
   codebuild_name = "${each.key}-apply"
   codebuild_role = aws_iam_role.codebuild_execution.arn
   environment_variables = merge(local.env_var, each.value.env_vars, {
-    SOURCE_DIR = each.value.path
+    SOURCE_DIR        = each.value.path
+    TERRAFORM_VERSION = var.terraform_version
   })
   build_timeout       = var.build_timeout
   build_spec          = "apply.yml"
   build_spec_override = var.apply_spec
   log_group           = aws_cloudwatch_log_group.this.name
-  image               = "hashicorp/terraform:${var.terraform_version}"
+  image               = "alpine:latest"
 }
 
 
