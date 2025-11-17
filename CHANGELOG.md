@@ -1,3 +1,9 @@
+## [0.10.0](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.9.0...v0.10.0) (2025-11-17)
+
+### Features
+
+* update base image for plan and apply to be apline:latest ([#16](https://github.com/Daemon-Solutions/terraform-aws-pipeline/issues/16)) ([9abca07](https://github.com/Daemon-Solutions/terraform-aws-pipeline/commit/9abca075c49a71d1f02289a6f40f61860f2243eb))
+
 ## [0.9.0](https://github.com/Daemon-Solutions/terraform-aws-pipeline/compare/v0.8.0...v0.9.0) (2025-10-13)
 
 ### Features
