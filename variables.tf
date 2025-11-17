@@ -268,3 +268,10 @@ variable "check_terraform_code_fmt" {
   type        = bool
   default     = true
 }
+
+
+variable "terraform_image" {
+  description = "Docker image used for plan and apply stages."
+  type        = string
+  default     = "hashicorp/terraform:latest"
+}
